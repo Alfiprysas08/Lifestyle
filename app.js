@@ -1,6 +1,7 @@
 // ============================================
 // LIFESTYLE - FULL JS (Firebase Realtime DB)
 // Includes: Tabs + Weekly + Materi + Keuangan (Rupiah) + Wishlist + Dashboard
+// Dashboard Log-Pose: Recent Weekly rapi (Title | Day | Time)
 // ============================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
@@ -147,7 +148,6 @@ function renderDashboard() {
   $("#sumExpense").textContent = rupiah(expense);
   $("#sumBalance").textContent = rupiah(balance);
 
-  // Tab Keuangan summary (RUPIAH)
   if ($("#financeIncome")) $("#financeIncome").textContent = rupiah(income);
   if ($("#financeExpense")) $("#financeExpense").textContent = rupiah(expense);
   if ($("#financeBalance")) $("#financeBalance").textContent = rupiah(balance);
@@ -162,43 +162,56 @@ function renderDashboard() {
   $("#sumWishDone").textContent = wishDone;
   $("#sumWishTodo").textContent = wishTodo;
 
-  
   // ---- Recent lists (ALL)
-const recentWeekly = weeklyArr.sort(byNewest);
-const recentMateri = materiAll.sort(byNewest);
-const recentKeu = finArr.sort(byNewest);
-const recentWish = wishArr.sort(byNewest);
-
+  const recentWeekly = weeklyArr.sort(byNewest);
+  const recentMateri = materiAll.sort(byNewest);
+  const recentKeu = finArr.sort(byNewest);
+  const recentWish = wishArr.sort(byNewest);
 
   const rw = $("#recentWeeklyList");
   const rm = $("#recentMateriList");
   const rk = $("#recentKeuanganList");
   const rws = $("#recentWishList");
 
+  // ===== Recent Weekly (Log Pose) - RAPI KOLom =====
   if (rw) {
-  rw.innerHTML = "";
-  if (recentWeekly.length === 0) rw.appendChild(mkLi("Belum ada data."));
-  recentWeekly.forEach((x) => {
-    const hari = x.hari ? x.hari : "-";
-    const jam = x.jam ? x.jam : "-";
-    rw.appendChild(
-      mkLi(`${x.status ? "✓" : "•"} ${x.judul} (${x.kategori}) • ${hari} • ${jam}`)
-    );
-  });
-}
+    rw.innerHTML = "";
+    if (recentWeekly.length === 0) {
+      rw.appendChild(mkLi("Belum ada data."));
+    } else {
+      recentWeekly.forEach((x) => {
+        const hari = x.hari ? x.hari : "-";
+        const jam = x.jam ? x.jam : "-";
 
+        const li = document.createElement("li");
+        li.className = "rp-row";
+
+        li.innerHTML = `
+          <span class="rp-title">${x.status ? "✓" : "•"} ${x.judul || "(tanpa judul)"} <small>(${x.kategori || "-"})</small></span>
+          <span class="rp-day">${hari}</span>
+          <span class="rp-time">${jam}</span>
+        `;
+
+        rw.appendChild(li);
+      });
+    }
+  }
+
+  // ===== Recent Materi =====
   if (rm) {
     rm.innerHTML = "";
     if (recentMateri.length === 0) rm.appendChild(mkLi("Belum ada data."));
     recentMateri.forEach((x) => rm.appendChild(mkLi(`${x.status ? "✓" : "•"} ${x.judul}`)));
   }
 
+  // ===== Recent Keuangan =====
   if (rk) {
     rk.innerHTML = "";
     if (recentKeu.length === 0) rk.appendChild(mkLi("Belum ada data."));
     recentKeu.forEach((x) => rk.appendChild(mkLi(`${x.jenis}: ${x.keterangan} (${rupiah(x.nominal)})`)));
   }
 
+  // ===== Recent Wishlist =====
   if (rws) {
     rws.innerHTML = "";
     if (recentWish.length === 0) rws.appendChild(mkLi("Belum ada data."));
@@ -271,14 +284,12 @@ function weeklyMatch(item, { q, st }) {
 }
 
 function renderWeekly() {
-  // clear lists
   for (const c of WEEKLY_CATS) {
     if (weeklyLists[c]) weeklyLists[c].innerHTML = "";
   }
 
   const filters = weeklyGetFilters();
 
-  // group
   const grouped = {};
   WEEKLY_CATS.forEach((c) => (grouped[c] = []));
 
@@ -289,7 +300,6 @@ function renderWeekly() {
     if (weeklyMatch(item, filters)) grouped[cat].push(item);
   }
 
-  // render each cat
   WEEKLY_CATS.forEach((cat) => {
     const arr = grouped[cat].sort(byNewest);
 
@@ -347,7 +357,6 @@ function renderWeekly() {
   });
 }
 
-// Weekly listeners
 if (weeklyForm) {
   weeklyForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -364,21 +373,19 @@ if (weeklyForm) {
     if (!payload.judul) return;
 
     if (weeklyId.value) {
-      // update
       update(ref(db, `weekly/${weeklyId.value}`), payload);
     } else {
-      // create
       push(ref(db, "weekly"), { ...payload, createdAt: Date.now() });
     }
 
     weeklyResetForm();
   });
 }
+
 if (weeklyCancelEditBtn) weeklyCancelEditBtn.addEventListener("click", weeklyResetForm);
 if (weeklySearch) weeklySearch.addEventListener("input", renderWeekly);
 if (weeklyStatusFilter) weeklyStatusFilter.addEventListener("change", renderWeekly);
 
-// Weekly realtime sync
 onValue(ref(db, "weekly"), (snap) => {
   store.weekly = snap.val() || {};
   renderWeekly();
@@ -392,7 +399,6 @@ const materiSearch = $("#materiSearch");
 const materiStatusFilter = $("#materiStatusFilter");
 const materiItemTemplate = $("#materiItemTemplate");
 
-// mapping subject -> elements
 const materiSubjects = {
   bahasa_inggris: {
     form: $("#materiFormInggris"),
@@ -556,7 +562,6 @@ setupMateriForms();
 if (materiSearch) materiSearch.addEventListener("input", renderMateri);
 if (materiStatusFilter) materiStatusFilter.addEventListener("change", renderMateri);
 
-// Materi realtime sync
 for (const subjectKey of Object.keys(materiSubjects)) {
   onValue(ref(db, `materi/${subjectKey}`), (snap) => {
     store.materi[subjectKey] = snap.val() || {};
@@ -615,7 +620,7 @@ function renderKeuangan() {
     row.querySelector(".col-date").textContent = x.tanggal || "-";
     row.querySelector(".col-type").textContent = x.jenis || "-";
     row.querySelector(".col-desc").textContent = x.keterangan || "-";
-    row.querySelector(".col-amount").textContent = rupiah(x.nominal); // <== RUPIAH
+    row.querySelector(".col-amount").textContent = rupiah(x.nominal);
 
     const btnEdit = row.querySelector(".btn-edit");
     const btnDelete = row.querySelector(".btn-delete");
@@ -624,7 +629,7 @@ function renderKeuangan() {
       keuId.value = x.id;
       keuType.value = x.jenis || "pendapatan";
       keuDesc.value = x.keterangan || "";
-      keuAmount.value = String(toNum(x.nominal)); // input tetap angka
+      keuAmount.value = String(toNum(x.nominal));
       keuDate.value = x.tanggal || "";
       keuSubmitBtn.textContent = "Update";
       $("#keuanganFormSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -665,6 +670,7 @@ if (keuForm) {
     keuResetForm();
   });
 }
+
 if (keuCancelBtn) keuCancelBtn.addEventListener("click", keuResetForm);
 
 onValue(ref(db, "keuangan"), (snap) => {
@@ -811,6 +817,7 @@ if (wishForm) {
     wishResetForm();
   });
 }
+
 if (wishCancelBtn) wishCancelBtn.addEventListener("click", wishResetForm);
 if (wishSearch) wishSearch.addEventListener("input", renderWishlist);
 if (wishStatusFilter) wishStatusFilter.addEventListener("change", renderWishlist);
