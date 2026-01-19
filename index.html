@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lifestyle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+
+  <!-- HEADER -->
+  <header id="appHeader">
+    <h1 id="appTitle">Lifestyle</h1>
+    <p id="appSubtitle">Personal Dashboard</p>
+  </header>
+
+  <!-- NAV / TABS -->
+  <nav id="tabNav" aria-label="Navigasi tab Lifestyle">
+    <button type="button" class="tab-btn is-active" data-tab="tab-dashboard">KAPAL UTAMA</button>
+    <button type="button" class="tab-btn" data-tab="tab-weekly">LOG-POSE</button>
+    <button type="button" class="tab-btn" data-tab="tab-materi">ARC SEKOLAH</button>
+    <button type="button" class="tab-btn" data-tab="tab-keuangan">TREASURY</button>
+    <button type="button" class="tab-btn" data-tab="tab-wishlist">FINAL ARC</button>
+  </nav>
+
+  <!-- MAIN -->
+  <main id="appMain">
+
+    <!-- =========================
+         TAB 1: DASHBOARD
+    ========================== -->
+    <section id="tab-dashboard" class="tab-panel is-active" aria-labelledby="Dashboard">
+      <header class="panel-header">
+        <h2>Dashboard</h2>
+        <p>Ringkasan Perjalananmu</p>
+      </header>
+
+      <!-- Summary Cards -->
+      <section id="dashboardSummary" aria-label="Ringkasan Dashboard">
+        <article class="summary-card" id="sum-weekly">
+          <h3>Log-Pose</h3>
+          <ul>
+            <li>Total: <b id="sumWeeklyTotal">0</b></li>
+            <li>Selesai: <b id="sumWeeklyDone">0</b></li>
+            <li>Belum: <b id="sumWeeklyTodo">0</b></li>
+          </ul>
+        </article>
+
+        <article class="summary-card" id="sum-materi">
+          <h3>Arc Sekolah</h3>
+          <ul>
+            <li>Total: <b id="sumMateriTotal">0</b></li>
+            <li>Selesai: <b id="sumMateriDone">0</b></li>
+            <li>Belum: <b id="sumMateriTodo">0</b></li>
+          </ul>
+        </article>
+
+        <article class="summary-card" id="sum-keuangan">
+          <h3>Treasury</h3>
+          <ul>
+            <li>Pendapatan: <b id="sumIncome">0</b></li>
+            <li>Pengeluaran: <b id="sumExpense">0</b></li>
+            <li>Saldo: <b id="sumBalance">0</b></li>
+          </ul>
+        </article>
+
+        <article class="summary-card" id="sum-wishlist">
+          <h3>Final Arc</h3>
+          <ul>
+            <li>Total: <b id="sumWishTotal">0</b></li>
+            <li>Selesai: <b id="sumWishDone">0</b></li>
+            <li>Belum: <b id="sumWishTodo">0</b></li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- Recent / Quick View -->
+      <section id="dashboardRecent" aria-label="Aktivitas terbaru">
+        <h3>Berlayar</h3>
+
+        <div class="recent-block" id="recent-weekly">
+          <h4>Log-Pose</h4>
+          <ul id="recentWeeklyList">
+            <!-- JS nanti isi item terbaru -->
+          </ul>
+        </div>
+
+        <div class="recent-block" id="recent-materi">
+          <h4>Arc Sekolah</h4>
+          <ul id="recentMateriList"></ul>
+        </div>
+
+        <div class="recent-block" id="recent-keuangan">
+          <h4>Treasury</h4>
+          <ul id="recentKeuanganList"></ul>
+        </div>
+
+        <div class="recent-block" id="recent-wishlist">
+          <h4>Final Arc</h4>
+          <ul id="recentWishList"></ul>
+        </div>
+      </section>
+    </section>
+
+
+    <!-- =========================
+         TAB 2: WEEKLY TRACKER
+    ========================== -->
+    <section id="tab-weekly" class="tab-panel" aria-labelledby="Weekly Tracker">
+      <header class="panel-header">
+        <h2>Log-Pose</h2>
+        <p>Weekly tracker</p>
+      </header>
+
+      <!-- Form Add / Edit -->
+      <section id="weeklyFormSection" aria-label="Form Weekly Tracker">
+        <h3>Tambah / Edit Kegiatan</h3>
+
+        <form id="weeklyForm">
+          <!-- hidden id untuk mode edit -->
+          <input type="hidden" id="weeklyId" name="weeklyId" />
+
+          <div class="field">
+            <label for="weeklyTitle">Nama Kegiatan</label>
+            <input id="weeklyTitle" name="weeklyTitle" type="text" placeholder="Contoh: Koreksi tugas" required />
+          </div>
+
+          <div class="field">
+            <label for="weeklyCategory">Kategori</label>
+            <select id="weeklyCategory" name="weeklyCategory" required>
+              <option value="Sekolah">Sekolah</option>
+              <option value="Kampus">Kampus</option>
+              <option value="Pemrograman">Pemrograman</option>
+              <option value="Keseharian">Keseharian</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="weeklyDay">Hari</label>
+            <input id="weeklyDay" name="weeklyDay" type="text" placeholder="Senin / Selasa / ..." />
+          </div>
+
+          <div class="field">
+            <label for="weeklyTime">Jam</label>
+            <input id="weeklyTime" name="weeklyTime" type="time" />
+          </div>
+
+          <div class="actions">
+            <button id="weeklySubmitBtn" type="submit">Simpan</button>
+            <button id="weeklyCancelEditBtn" type="button">Batal Edit</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Filters (opsional, nanti JS) -->
+      <section id="weeklyTools" aria-label="Alat Weekly Tracker">
+        <h3>Filter & Pencarian</h3>
+
+        <div class="field">
+          <label for="weeklySearch">Cari kegiatan</label>
+          <input id="weeklySearch" type="search" placeholder="Ketik judul..." />
+        </div>
+
+        <div class="field">
+          <label for="weeklyStatusFilter">Status</label>
+          <select id="weeklyStatusFilter">
+            <option value="all">Semua</option>
+            <option value="todo">Belum selesai</option>
+            <option value="done">Selesai</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- List by Categories -->
+      <section id="weeklyLists" aria-label="Daftar Weekly Tracker per kategori">
+        <h3>Daftar Kegiatan</h3>
+
+        <!-- Sekolah -->
+        <section class="category-block" id="weekly-cat-sekolah" data-category="Sekolah">
+          <header class="category-header">
+            <h4>Sekolah</h4>
+            <p>Total: <b id="weeklyCountSekolah">0</b> • Selesai: <b id="weeklyDoneSekolah">0</b></p>
+          </header>
+          <ul class="item-list" id="weeklyListSekolah">
+            <!-- JS nanti render item -->
+          </ul>
+        </section>
+
+        <!-- Kampus -->
+        <section class="category-block" id="weekly-cat-kampus" data-category="Kampus">
+          <header class="category-header">
+            <h4>Kampus</h4>
+            <p>Total: <b id="weeklyCountKampus">0</b> • Selesai: <b id="weeklyDoneKampus">0</b></p>
+          </header>
+          <ul class="item-list" id="weeklyListKampus"></ul>
+        </section>
+
+        <!-- Pemrograman -->
+        <section class="category-block" id="weekly-cat-pemrograman" data-category="Pemrograman">
+          <header class="category-header">
+            <h4>Pemrograman</h4>
+            <p>Total: <b id="weeklyCountProgramming">0</b> • Selesai: <b id="weeklyDoneProgramming">0</b></p>
+          </header>
+          <ul class="item-list" id="weeklyListProgramming"></ul>
+        </section>
+
+        <!-- Keseharian -->
+        <section class="category-block" id="weekly-cat-keseharian" data-category="Keseharian">
+          <header class="category-header">
+            <h4>Keseharian</h4>
+            <p>Total: <b id="weeklyCountDaily">0</b> • Selesai: <b id="weeklyDoneDaily">0</b></p>
+          </header>
+          <ul class="item-list" id="weeklyListDaily"></ul>
+        </section>
+      </section>
+
+      <!-- Template item (buat referensi struktur; nanti JS bisa clone) -->
+      <template id="weeklyItemTemplate">
+        <li class="item">
+          <div class="item-main">
+            <h5 class="item-title">Judul kegiatan</h5>
+            <p class="item-meta">Hari • Jam</p>
+          </div>
+          <div class="item-actions">
+            <button type="button" class="btn-toggle">Selesai/Belum</button>
+            <button type="button" class="btn-edit">Edit</button>
+            <button type="button" class="btn-delete">Hapus</button>
+          </div>
+        </li>
+      </template>
+    </section>
+
+
+    <!-- =========================
+         TAB 3: MATERI SEKOLAH
+    ========================== -->
+    <section id="tab-materi" class="tab-panel" aria-labelledby="Materi Sekolah">
+      <header class="panel-header">
+        <h2>Arc Sekolah</h2>
+        <p>Materi Sekolah</p>
+      </header>
+
+      <!-- Tools -->
+      <section id="materiTools" aria-label="Alat Materi Sekolah">
+        <h3>Filter & Pencarian</h3>
+        <div class="field">
+          <label for="materiSearch">Cari materi</label>
+          <input id="materiSearch" type="search" placeholder="Ketik judul materi..." />
+        </div>
+
+        <div class="field">
+          <label for="materiStatusFilter">Status</label>
+          <select id="materiStatusFilter">
+            <option value="all">Semua</option>
+            <option value="todo">Belum selesai</option>
+            <option value="done">Selesai</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- 4 Sub Materi -->
+      <section id="materiSubjects" aria-label="Sub Materi">
+
+        <!-- Bahasa Inggris -->
+        <section class="subject-block" id="materi-inggris" data-subject="bahasa_inggris">
+          <header class="subject-header">
+            <h3>Bahasa Inggris</h3>
+            <p>Total: <b id="materiCountInggris">0</b> • Selesai: <b id="materiDoneInggris">0</b></p>
+          </header>
+
+          <form class="materiForm" id="materiFormInggris">
+            <input type="hidden" class="materiId" name="materiId" />
+            <div class="field">
+              <label>Judul Materi</label>
+              <input class="materiTitle" type="text" placeholder="Contoh: Simple Present Tense" required />
+            </div>
+            <div class="field">
+              <label>Catatan (opsional)</label>
+              <textarea class="materiNote" placeholder="Ringkasan, link, halaman buku..." rows="3"></textarea>
+            </div>
+            <div class="actions">
+              <button type="submit" class="materiSubmitBtn">Simpan</button>
+              <button type="button" class="materiCancelBtn">Batal Edit</button>
+            </div>
+          </form>
+
+          <ul class="item-list" id="materiListInggris"></ul>
+        </section>
+
+        <!-- PJOK -->
+        <section class="subject-block" id="materi-pjok" data-subject="pjok">
+          <header class="subject-header">
+            <h3>PJOK</h3>
+            <p>Total: <b id="materiCountPJOK">0</b> • Selesai: <b id="materiDonePJOK">0</b></p>
+          </header>
+
+          <form class="materiForm" id="materiFormPJOK">
+            <input type="hidden" class="materiId" name="materiId" />
+            <div class="field">
+              <label>Judul Materi</label>
+              <input class="materiTitle" type="text" placeholder="Contoh: Permainan bola besar" required />
+            </div>
+            <div class="field">
+              <label>Catatan (opsional)</label>
+              <textarea class="materiNote" rows="3" placeholder="Ringkasan, teknik, langkah..."></textarea>
+            </div>
+            <div class="actions">
+              <button type="submit" class="materiSubmitBtn">Simpan</button>
+              <button type="button" class="materiCancelBtn">Batal Edit</button>
+            </div>
+          </form>
+
+          <ul class="item-list" id="materiListPJOK"></ul>
+        </section>
+
+        <!-- Speaking Class -->
+        <section class="subject-block" id="materi-speaking" data-subject="speaking_class">
+          <header class="subject-header">
+            <h3>Speaking Class</h3>
+            <p>Total: <b id="materiCountSpeaking">0</b> • Selesai: <b id="materiDoneSpeaking">0</b></p>
+          </header>
+
+          <form class="materiForm" id="materiFormSpeaking">
+            <input type="hidden" class="materiId" name="materiId" />
+            <div class="field">
+              <label>Judul Materi</label>
+              <input class="materiTitle" type="text" placeholder="Contoh: Introducing Yourself" required />
+            </div>
+            <div class="field">
+              <label>Catatan (opsional)</label>
+              <textarea class="materiNote" rows="3" placeholder="Topic, script, link video..."></textarea>
+            </div>
+            <div class="actions">
+              <button type="submit" class="materiSubmitBtn">Simpan</button>
+              <button type="button" class="materiCancelBtn">Batal Edit</button>
+            </div>
+          </form>
+
+          <ul class="item-list" id="materiListSpeaking"></ul>
+        </section>
+
+        <!-- Kelas Diskusi -->
+        <section class="subject-block" id="materi-diskusi" data-subject="kelas_diskusi">
+          <header class="subject-header">
+            <h3>Kelas Diskusi</h3>
+            <p>Total: <b id="materiCountDiskusi">0</b> • Selesai: <b id="materiDoneDiskusi">0</b></p>
+          </header>
+
+          <form class="materiForm" id="materiFormDiskusi">
+            <input type="hidden" class="materiId" name="materiId" />
+            <div class="field">
+              <label>Judul Materi</label>
+              <input class="materiTitle" type="text" placeholder="Contoh: Critical Thinking" required />
+            </div>
+            <div class="field">
+              <label>Catatan (opsional)</label>
+              <textarea class="materiNote" rows="3" placeholder="Ringkasan topik, poin diskusi..."></textarea>
+            </div>
+            <div class="actions">
+              <button type="submit" class="materiSubmitBtn">Simpan</button>
+              <button type="button" class="materiCancelBtn">Batal Edit</button>
+            </div>
+          </form>
+
+          <ul class="item-list" id="materiListDiskusi"></ul>
+        </section>
+
+      </section>
+
+      <!-- template materi item -->
+      <template id="materiItemTemplate">
+        <li class="item">
+          <div class="item-main">
+            <h5 class="item-title">Judul materi</h5>
+            <p class="item-meta">Catatan singkat / link</p>
+          </div>
+          <div class="item-actions">
+            <button type="button" class="btn-toggle">Selesai/Belum</button>
+            <button type="button" class="btn-edit">Edit</button>
+            <button type="button" class="btn-delete">Hapus</button>
+          </div>
+        </li>
+      </template>
+    </section>
+
+
+    <!-- =========================
+         TAB 4: KEUANGAN
+    ========================== -->
+    <section id="tab-keuangan" class="tab-panel" aria-labelledby="Keuangan">
+      <header class="panel-header">
+        <h2>Treasury</h2>
+        <p>Kumpulkan Berry sebermanfaat mungkin</p>
+      </header>
+
+      <!-- Summary -->
+      <section id="keuanganSummary" aria-label="Ringkasan Keuangan">
+        <article class="summary-card">
+          <h3>Ringkasan</h3>
+          <ul>
+            <li>Pendapatan: <b id="financeIncome">0</b></li>
+            <li>Pengeluaran: <b id="financeExpense">0</b></li>
+            <li>Saldo: <b id="financeBalance">0</b></li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- Form -->
+      <section id="keuanganFormSection" aria-label="Form Keuangan">
+        <h3>Tambah / Edit Catatan</h3>
+
+        <form id="keuanganForm">
+          <input type="hidden" id="keuanganId" name="keuanganId" />
+
+          <div class="field">
+            <label for="keuanganType">Jenis</label>
+            <select id="keuanganType" name="keuanganType" required>
+              <option value="pendapatan">Pendapatan</option>
+              <option value="pengeluaran">Pengeluaran</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="keuanganDesc">Keterangan</label>
+            <input id="keuanganDesc" name="keuanganDesc" type="text" placeholder="Contoh: Gaji / Jajan / Kuota" required />
+          </div>
+
+          <div class="field">
+            <label for="keuanganAmount">Nominal</label>
+            <input id="keuanganAmount" name="keuanganAmount" type="number" inputmode="numeric" placeholder="Contoh: 50000" required />
+          </div>
+
+          <div class="field">
+            <label for="keuanganDate">Tanggal</label>
+            <input id="keuanganDate" name="keuanganDate" type="date" />
+          </div>
+
+          <div class="actions">
+            <button id="keuanganSubmitBtn" type="submit">Simpan</button>
+            <button id="keuanganCancelEditBtn" type="button">Batal Edit</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- List -->
+      <section id="keuanganListSection" aria-label="Daftar Keuangan">
+        <h3>Riwayat</h3>
+
+        <table id="keuanganTable" border="1" cellspacing="0" cellpadding="8">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Jenis</th>
+              <th>Keterangan</th>
+              <th>Nominal</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="keuanganTbody">
+            <!-- JS nanti render -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- template keuangan row -->
+      <template id="keuanganRowTemplate">
+        <tr>
+          <td class="col-date">2026-01-01</td>
+          <td class="col-type">pendapatan</td>
+          <td class="col-desc">Keterangan</td>
+          <td class="col-amount">0</td>
+          <td class="col-actions">
+            <button type="button" class="btn-edit">Edit</button>
+            <button type="button" class="btn-delete">Hapus</button>
+          </td>
+        </tr>
+      </template>
+    </section>
+
+
+    <!-- =========================
+         TAB 5: WISH LIST
+    ========================== -->
+    <section id="tab-wishlist" class="tab-panel" aria-labelledby="Wish List">
+      <header class="panel-header">
+        <h2>Final Arc Tahunan</h2>
+        <p>Capailah Impianmu</p>
+      </header>
+
+      <!-- Form -->
+      <section id="wishFormSection" aria-label="Form Wish List">
+        <h3>Tambah / Edit Wish</h3>
+
+        <form id="wishForm">
+          <input type="hidden" id="wishId" name="wishId" />
+
+          <div class="field">
+            <label for="wishTitle">Judul Wish</label>
+            <input id="wishTitle" name="wishTitle" type="text" placeholder="Contoh: Beli laptop baru" required />
+          </div>
+
+          <div class="field">
+            <label for="wishTargetDate">Target (opsional)</label>
+            <input id="wishTargetDate" name="wishTargetDate" type="date" />
+          </div>
+
+          <div class="field">
+            <label for="wishNote">Catatan (opsional)</label>
+            <textarea id="wishNote" name="wishNote" rows="3" placeholder="Detail, link, alasan..."></textarea>
+          </div>
+
+          <div class="actions">
+            <button id="wishSubmitBtn" type="submit">Simpan</button>
+            <button id="wishCancelEditBtn" type="button">Batal Edit</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Tools -->
+      <section id="wishTools" aria-label="Filter Wish List">
+        <h3>Filter</h3>
+        <div class="field">
+          <label for="wishSearch">Cari wish</label>
+          <input id="wishSearch" type="search" placeholder="Ketik judul wish..." />
+        </div>
+
+        <div class="field">
+          <label for="wishStatusFilter">Status</label>
+          <select id="wishStatusFilter">
+            <option value="all">Semua</option>
+            <option value="todo">Belum selesai</option>
+            <option value="done">Selesai</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Lists -->
+      <section id="wishLists" aria-label="Daftar Wish List">
+        <h3>Daftar Wish</h3>
+
+        <div class="wish-block">
+          <h4>Belum Selesai</h4>
+          <ul class="item-list" id="wishListTodo"></ul>
+        </div>
+
+        <div class="wish-block">
+          <h4>Selesai</h4>
+          <ul class="item-list" id="wishListDone"></ul>
+        </div>
+      </section>
+
+      <!-- template wish item -->
+      <template id="wishItemTemplate">
+        <li class="item">
+          <div class="item-main">
+            <h5 class="item-title">Judul wish</h5>
+            <p class="item-meta">Target • Catatan</p>
+          </div>
+          <div class="item-actions">
+            <button type="button" class="btn-toggle">Selesai/Belum</button>
+            <button type="button" class="btn-edit">Edit</button>
+            <button type="button" class="btn-delete">Hapus</button>
+          </div>
+        </li>
+      </template>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="appFooter">
+    <p>© AlfiPrysas_.</p>
+  </footer>
+
+
+  <script type="module" src="app.js"></script>
+
+</body>
+</html>
