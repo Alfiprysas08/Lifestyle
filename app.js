@@ -162,11 +162,13 @@ function renderDashboard() {
   $("#sumWishDone").textContent = wishDone;
   $("#sumWishTodo").textContent = wishTodo;
 
-  // ---- Recent lists (top 5)
-  const recentWeekly = weeklyArr.sort(byNewest).slice(0, 5);
-  const recentMateri = materiAll.sort(byNewest).slice(0, 5);
-  const recentKeu = finArr.sort(byNewest).slice(0, 5);
-  const recentWish = wishArr.sort(byNewest).slice(0, 5);
+  
+  // ---- Recent lists (ALL)
+const recentWeekly = weeklyArr.sort(byNewest);
+const recentMateri = materiAll.sort(byNewest);
+const recentKeu = finArr.sort(byNewest);
+const recentWish = wishArr.sort(byNewest);
+
 
   const rw = $("#recentWeeklyList");
   const rm = $("#recentMateriList");
