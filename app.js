@@ -176,10 +176,16 @@ const recentWish = wishArr.sort(byNewest);
   const rws = $("#recentWishList");
 
   if (rw) {
-    rw.innerHTML = "";
-    if (recentWeekly.length === 0) rw.appendChild(mkLi("Belum ada data."));
-    recentWeekly.forEach((x) => rw.appendChild(mkLi(`${x.status ? "✓" : "•"} ${x.judul} (${x.kategori})`)));
-  }
+  rw.innerHTML = "";
+  if (recentWeekly.length === 0) rw.appendChild(mkLi("Belum ada data."));
+  recentWeekly.forEach((x) => {
+    const hari = x.hari ? x.hari : "-";
+    const jam = x.jam ? x.jam : "-";
+    rw.appendChild(
+      mkLi(`${x.status ? "✓" : "•"} ${x.judul} (${x.kategori}) • ${hari} • ${jam}`)
+    );
+  });
+}
 
   if (rm) {
     rm.innerHTML = "";
