@@ -1,6 +1,6 @@
 /* =========================================
-   LIFESTYLE - AKAGAMI PIRATE THEME (FULL CSS)
-   Background: Shanks image + dark overlay
+   LIFESTYLE - AKAGAMI PIRATE THEME (V2)
+   Lebih berwarna • tetap elegan • tetap dark
    Fonts: Pirata One (title), Cinzel (headings)
    ========================================= */
 
@@ -10,7 +10,6 @@
 *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
-
 img { max-width: 100%; height: auto; }
 button, input, select, textarea { font: inherit; }
 a { color: inherit; }
@@ -18,33 +17,43 @@ a { color: inherit; }
 /* ---------- THEME TOKENS ---------- */
 :root{
   --bg: #07070a;
-  --panel: rgba(18, 18, 24, .72);
-  --panel-strong: rgba(18, 18, 24, .90);
-  --panel-2: rgba(26, 26, 35, .60);
 
-  --line: rgba(255,255,255,.10);
-  --line2: rgba(255,255,255,.06);
+  --panel: rgba(16, 16, 22, .74);
+  --panel-strong: rgba(16, 16, 22, .92);
+  --panel-2: rgba(26, 26, 36, .58);
 
-  --text: #f4f4f7;
-  --muted: rgba(244,244,247,.72);
+  --line: rgba(255,255,255,.12);
+  --line2: rgba(255,255,255,.07);
 
-  --red: #8b0000;
-  --red2:#ff0000;
-  --gold:#f0c14b;
+  --text: #f6f6fb;
+  --muted: rgba(246,246,251,.72);
 
-  --ok:#2ecc71;
-  --warn:#f39c12;
-  --danger:#ff4d4d;
+  /* Accent palette (lebih berwarna tapi elegan) */
+  --red: #b00010;
+  --crimson: #ff2b2b;
+  --gold: #f0c14b;
+  --amber:#ffb020;
+
+  --emerald:#2ecc71;
+  --cyan:#2fd3ff;
+  --violet:#9b6bff;
+
+  --ok: var(--emerald);
+  --warn: var(--amber);
+  --danger: #ff4d4d;
 
   --r10: 10px;
   --r14: 14px;
   --r18: 18px;
+  --r24: 24px;
 
-  --shadow: 0 18px 46px rgba(0,0,0,.36);
-  --shadowSoft: 0 10px 26px rgba(0,0,0,.22);
+  --shadow: 0 18px 46px rgba(0,0,0,.40);
+  --shadowSoft: 0 10px 26px rgba(0,0,0,.25);
 
-  --glowRed: 0 0 24px rgba(255, 0, 0, .25);
-  --glowRedStrong: 0 0 40px rgba(255, 0, 0, .35);
+  --glowRed: 0 0 26px rgba(255, 43, 43, .28);
+  --glowGold: 0 0 28px rgba(240, 193, 75, .22);
+  --glowCyan: 0 0 28px rgba(47, 211, 255, .18);
+  --glowViolet: 0 0 28px rgba(155, 107, 255, .18);
 
   --title-font: "Pirata One", system-ui, sans-serif;
   --heading-font: "Cinzel", system-ui, sans-serif;
@@ -52,7 +61,7 @@ a { color: inherit; }
 }
 
 /* ---------- BODY + BACKGROUND ---------- */
-body {
+body{
   margin: 0;
   min-height: 100vh;
   line-height: 1.45;
@@ -60,9 +69,10 @@ body {
   font-family: var(--body-font);
 
   background:
-    linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.88)),
-    radial-gradient(900px 520px at 15% 0%, rgba(255,0,0,.14), transparent 60%),
-    radial-gradient(1000px 560px at 95% 10%, rgba(139,0,0,.22), transparent 58%),
+    radial-gradient(1100px 520px at 15% 0%, rgba(255, 43, 43, .18), transparent 62%),
+    radial-gradient(900px 520px at 85% 10%, rgba(155, 107, 255, .16), transparent 60%),
+    radial-gradient(900px 520px at 55% 85%, rgba(47, 211, 255, .10), transparent 62%),
+    linear-gradient(180deg, rgba(0,0,0,.76), rgba(0,0,0,.90)),
     url("Shanks.jpg");
 
   background-size: cover;
@@ -71,7 +81,6 @@ body {
   background-attachment: fixed;
 }
 
-/* Smooth on mobile: fixed bg can lag */
 @media (max-width: 720px){
   body { background-attachment: scroll; }
 }
@@ -79,8 +88,8 @@ body {
 /* =========================================
    LAYOUT
    ========================================= */
-#appMain {
-  max-width: 1100px;
+#appMain{
+  max-width: 1120px;
   margin: 0 auto;
   padding: 14px 14px 76px;
 }
@@ -92,33 +101,47 @@ body {
   padding: 18px 14px;
   text-align:center;
   border-bottom: 1px solid var(--line2);
+
   background:
-    linear-gradient(135deg, rgba(139,0,0,.92), rgba(255,0,0,.55)),
-    radial-gradient(800px 250px at 50% 0%, rgba(255,255,255,.12), transparent 60%);
+    radial-gradient(900px 220px at 50% 0%, rgba(255,255,255,.14), transparent 60%),
+    linear-gradient(135deg, rgba(176,0,16,.92), rgba(255,43,43,.50));
+
   box-shadow: var(--shadowSoft);
+  position: relative;
+  overflow: hidden;
+}
+
+#appHeader::after{
+  content:"";
+  position:absolute;
+  inset:-40px -80px auto auto;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle at 30% 30%, rgba(240,193,75,.26), transparent 60%);
+  transform: rotate(12deg);
+  pointer-events:none;
 }
 
 #appTitle{
   margin: 0;
   font-family: var(--title-font);
-  font-size: 2.35rem;
+  font-size: 2.45rem;
   letter-spacing: 1.3px;
   text-transform: uppercase;
 
-  /* “logo-ish” effect (outline + glow) */
-  -webkit-text-stroke: 1px rgba(255,255,255,.65);
+  -webkit-text-stroke: 1px rgba(255,255,255,.68);
   text-shadow:
     0 2px 0 rgba(0,0,0,.92),
-    0 0 18px rgba(255,0,0,.38),
-    0 0 34px rgba(255,0,0,.22);
+    0 0 18px rgba(255,43,43,.45),
+    0 0 34px rgba(255,43,43,.24);
 }
 
 #appSubtitle{
   margin: 6px 0 0;
   font-family: var(--heading-font);
   letter-spacing: .6px;
-  font-size: .95rem;
-  color: rgba(255,255,255,.88);
+  font-size: .98rem;
+  color: rgba(255,255,255,.90);
 }
 
 /* =========================================
@@ -134,12 +157,12 @@ body {
   overflow-x: auto;
   border-bottom: 1px solid var(--line2);
   background: rgba(8,8,10,.78);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 }
 
 #tabNav::-webkit-scrollbar { height: 8px; }
 #tabNav::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.14);
   border-radius: 999px;
 }
 
@@ -148,45 +171,42 @@ body {
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,.06);
+  background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
   color: var(--text);
   cursor: pointer;
   white-space: nowrap;
-  transition: transform .12s ease, border-color .12s ease, background .12s ease, opacity .12s ease;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease, opacity .12s ease, box-shadow .12s ease;
 }
 
 .tab-btn:hover{
   transform: translateY(-1px);
-  border-color: rgba(255,255,255,.20);
-}
-.tab-btn:active{
-  transform: translateY(0);
-  opacity: .92;
+  border-color: rgba(255,255,255,.22);
+  box-shadow: 0 10px 22px rgba(0,0,0,.18);
 }
 
 .tab-btn.is-active{
-  background: linear-gradient(135deg, rgba(139,0,0,.95), rgba(255,0,0,.55));
-  border-color: rgba(255,255,255,.22);
+  background:
+    radial-gradient(260px 80px at 20% 0%, rgba(240,193,75,.22), transparent 60%),
+    linear-gradient(135deg, rgba(176,0,16,.96), rgba(255,43,43,.55));
+  border-color: rgba(255,255,255,.24);
   box-shadow: var(--glowRed);
 }
 
 /* =========================================
    TAB PANELS
    ========================================= */
-.tab-panel{
-  display: none;
-  margin-top: 14px;
-}
+.tab-panel{ display: none; margin-top: 14px; }
 .tab-panel.is-active{ display:block; }
 
 .panel-header{
   margin-bottom: 12px;
   padding: 14px;
-  border-radius: var(--r18);
+  border-radius: var(--r24);
   border: 1px solid var(--line2);
   background: var(--panel);
   box-shadow: var(--shadowSoft);
   position: relative;
+  overflow: hidden;
 }
 
 .panel-header::before{
@@ -195,13 +215,24 @@ body {
   inset:0;
   border-radius: inherit;
   pointer-events:none;
-  box-shadow: inset 0 0 0 1px rgba(255,0,0,.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 43, 43, .09);
+}
+
+.panel-header::after{
+  content:"";
+  position:absolute;
+  inset:auto -50px -60px auto;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle at 30% 30%, rgba(155,107,255,.18), transparent 60%);
+  pointer-events:none;
+  transform: rotate(10deg);
 }
 
 .panel-header h2{
   margin: 0 0 6px;
   font-family: var(--heading-font);
-  font-size: 1.28rem;
+  font-size: 1.32rem;
   letter-spacing: .4px;
 }
 
@@ -231,12 +262,13 @@ body {
 #wishLists,
 #dashboardRecent{
   border: 1px solid var(--line2);
-  border-radius: var(--r18);
+  border-radius: var(--r24);
   background: var(--panel);
   box-shadow: var(--shadowSoft);
   padding: 14px;
   margin-bottom: 12px;
   position: relative;
+  overflow: hidden;
 }
 
 .summary-card::before,
@@ -260,14 +292,14 @@ body {
   inset:0;
   border-radius: inherit;
   pointer-events:none;
-  box-shadow: inset 0 0 0 1px rgba(255,0,0,.06);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
 }
 
 h3{
   margin: 0 0 10px;
   font-family: var(--heading-font);
-  font-size: 1.1rem;
-  letter-spacing: .3px;
+  font-size: 1.12rem;
+  letter-spacing: .35px;
 }
 h4{
   margin: 0 0 8px;
@@ -288,15 +320,27 @@ ul{ margin: 0; padding-left: 18px; }
 }
 
 .item{
-  border: 1px solid var(--line2);
-  border-radius: var(--r14);
-  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--r18);
+  background:
+    radial-gradient(400px 120px at 10% 0%, rgba(240,193,75,.06), transparent 60%),
+    rgba(255,255,255,.05);
   padding: 12px;
+  transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+.item:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.14);
+  box-shadow: 0 14px 26px rgba(0,0,0,.18);
+  background:
+    radial-gradient(420px 140px at 10% 0%, rgba(47,211,255,.07), transparent 60%),
+    rgba(255,255,255,.06);
 }
 
 .item-main{ display: grid; gap: 4px; }
 .item-title{ margin: 0; font-size: 1rem; }
-.item-meta{ margin: 0; color: var(--muted); font-size: .9rem; }
+.item-meta{ margin: 0; color: var(--muted); font-size: .92rem; }
 
 .actions,
 .item-actions{
@@ -306,25 +350,28 @@ ul{ margin: 0; padding-left: 18px; }
   margin-top: 10px;
 }
 
-/* Buttons */
+/* =========================================
+   BUTTONS (lebih berwarna & elegan)
+   ========================================= */
 button{
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
   color: var(--text);
   border-radius: 999px;
   padding: 9px 12px;
   cursor: pointer;
-  transition: transform .12s ease, border-color .12s ease, background .12s ease, opacity .12s ease;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease, opacity .12s ease, box-shadow .12s ease;
 }
 
 button:hover{
   transform: translateY(-1px);
-  border-color: rgba(255,255,255,.20);
+  border-color: rgba(255,255,255,.22);
+  box-shadow: 0 10px 22px rgba(0,0,0,.20);
 }
 button:active{ transform: translateY(0); opacity: .92; }
 
 button:focus-visible{
-  outline: 2px solid rgba(240, 193, 75, .85);
+  outline: 2px solid rgba(240, 193, 75, .88);
   outline-offset: 2px;
 }
 
@@ -333,8 +380,10 @@ button:focus-visible{
 .materiSubmitBtn,
 #keuanganSubmitBtn,
 #wishSubmitBtn{
-  background: linear-gradient(135deg, rgba(139,0,0,.95), rgba(255,0,0,.55));
-  border-color: rgba(255,255,255,.22);
+  background:
+    radial-gradient(260px 80px at 20% 0%, rgba(240,193,75,.22), transparent 60%),
+    linear-gradient(135deg, rgba(176,0,16,.96), rgba(255,43,43,.55));
+  border-color: rgba(255,255,255,.26);
   box-shadow: var(--glowRed);
 }
 
@@ -343,7 +392,15 @@ button:focus-visible{
 .materiCancelBtn,
 #keuanganCancelEditBtn,
 #wishCancelEditBtn{
-  background: rgba(255,255,255,.06);
+  background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
+}
+
+/* Extra: hover highlight untuk tombol aksi item */
+.item-actions .btn-toggle:hover{ box-shadow: var(--glowGold); }
+.item-actions .btn-edit:hover{ box-shadow: var(--glowViolet); }
+.item-actions .btn-delete:hover{
+  box-shadow: 0 0 22px rgba(255, 77, 77, .22);
+  border-color: rgba(255, 77, 77, .35);
 }
 
 /* Forms */
@@ -355,40 +412,48 @@ button:focus-visible{
 
 label{
   font-size: .9rem;
-  color: rgba(255,255,255,.85);
+  color: rgba(255,255,255,.86);
 }
 
 input, select, textarea{
   width: 100%;
   padding: 10px 12px;
-  border-radius: var(--r14);
-  border: 1px solid var(--line);
-  background: rgba(8,8,10,.55);
+  border-radius: var(--r18);
+  border: 1px solid rgba(255,255,255,.12);
+  background:
+    radial-gradient(260px 60px at 10% 0%, rgba(47,211,255,.08), transparent 60%),
+    rgba(8,8,10,.55);
   color: var(--text);
   outline: none;
+  transition: border-color .12s ease, box-shadow .12s ease, background .12s ease;
 }
 
 textarea{ resize: vertical; min-height: 90px; }
 
 input::placeholder,
 textarea::placeholder{
-  color: rgba(244,244,247,.45);
+  color: rgba(246,246,251,.45);
 }
 
 input:focus,
 select:focus,
 textarea:focus{
-  border-color: rgba(255,0,0,.35);
-  box-shadow: var(--glowRed);
+  border-color: rgba(47,211,255,.40);
+  box-shadow: var(--glowCyan);
+  background:
+    radial-gradient(260px 60px at 10% 0%, rgba(155,107,255,.10), transparent 60%),
+    rgba(8,8,10,.62);
 }
 
 /* Category / Subject headers */
 .category-header,
 .subject-header{
   padding: 12px;
-  border-radius: var(--r14);
-  background: rgba(255,255,255,.05);
-  border: 1px solid var(--line2);
+  border-radius: var(--r18);
+  border: 1px solid rgba(255,255,255,.08);
+  background:
+    radial-gradient(500px 120px at 0% 0%, rgba(255,43,43,.10), transparent 60%),
+    rgba(255,255,255,.04);
   margin-bottom: 10px;
 }
 
@@ -402,27 +467,35 @@ textarea:focus{
 .category-header b,
 .subject-header b{ color:#fff; }
 
-/* DONE state (JS tinggal toggle .is-done pada .item) */
+/* =========================================
+   DONE state (lebih “premium”)
+   ========================================= */
 .item.is-done{
-  opacity: .72;
+  opacity: .75;
   filter: saturate(.9);
   position: relative;
 }
-.item.is-done .item-title{ text-decoration: line-through; }
+
+.item.is-done .item-title{
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgba(240,193,75,.55);
+}
 
 .item.is-done::before{
   content:"✓";
   position:absolute;
   top: 10px;
   right: 12px;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   display:grid;
   place-items:center;
   border-radius: 999px;
   background: rgba(46,204,113,.18);
   border: 1px solid rgba(46,204,113,.35);
-  color: rgba(255,255,255,.95);
+  color: rgba(255,255,255,.96);
+  box-shadow: 0 0 20px rgba(46,204,113,.16);
 }
 
 /* =========================================
@@ -437,31 +510,28 @@ textarea:focus{
 
 .summary-card{
   margin: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  overflow: hidden;
+  background:
+    radial-gradient(500px 160px at 10% 0%, rgba(240,193,75,.10), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
 }
 
 .summary-card h3{ margin-bottom: 8px; }
 .summary-card ul{ padding-left: 18px; color: var(--muted); }
 .summary-card b{ color: #fff; }
 
-.summary-card::after{
-  content:"";
-  position:absolute;
-  inset:auto -30px -30px auto;
-  width: 160px;
-  height: 160px;
-  background: radial-gradient(circle at 30% 30%, rgba(255,0,0,.20), transparent 60%);
-  transform: rotate(10deg);
-}
+/* Bikin tiap kartu punya “accent” berbeda (lebih berwarna) */
+#sum-weekly{ box-shadow: var(--shadowSoft), var(--glowCyan); }
+#sum-materi{ box-shadow: var(--shadowSoft), var(--glowViolet); }
+#sum-keuangan{ box-shadow: var(--shadowSoft), var(--glowGold); }
+#sum-wishlist{ box-shadow: var(--shadowSoft), var(--glowRed); }
 
-#dashboardRecent{
-  background: var(--panel);
-}
+#dashboardRecent{ background: var(--panel); }
 #dashboardRecent > h3{ margin-bottom: 12px; }
 
 .recent-block{
-  background: rgba(255,255,255,.03);
+  background:
+    radial-gradient(520px 140px at 10% 0%, rgba(155,107,255,.08), transparent 60%),
+    rgba(255,255,255,.03);
 }
 .recent-block:last-child{ margin-bottom: 0; }
 
@@ -473,7 +543,7 @@ textarea:focus{
 }
 .recent-block ul::-webkit-scrollbar{ width: 8px; }
 .recent-block ul::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.14);
+  background: rgba(255,255,255,.16);
   border-radius: 999px;
 }
 
@@ -486,16 +556,14 @@ textarea:focus{
 
 #recentWeeklyList .rp-row{
   display: grid;
-  grid-template-columns: 1fr 120px 70px; /* title | hari | jam */
+  grid-template-columns: 1fr 7.5rem 4.5rem; /* title | hari | jam */
   gap: 10px;
   align-items: center;
-  padding: 6px 0;
+  padding: 8px 0;
   border-bottom: 1px solid rgba(255,255,255,.06);
 }
 
-#recentWeeklyList .rp-row:last-child{
-  border-bottom: none;
-}
+#recentWeeklyList .rp-row:last-child{ border-bottom: none; }
 
 #recentWeeklyList .rp-title{
   overflow: hidden;
@@ -504,27 +572,37 @@ textarea:focus{
 }
 
 #recentWeeklyList .rp-title small{
-  color: rgba(244,244,247,.72);
+  color: rgba(246,246,251,.72);
   font-size: .85em;
 }
 
-#recentWeeklyList .rp-day,
+/* Hari & Jam lebih “glowy” */
+#recentWeeklyList .rp-day{
+  text-align: right;
+  color: rgba(246,246,251,.86);
+  text-transform: capitalize;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 18px rgba(47,211,255,.16);
+}
+
 #recentWeeklyList .rp-time{
   text-align: right;
-  color: rgba(244,244,247,.78);
+  color: rgba(246,246,251,.86);
   font-variant-numeric: tabular-nums;
+  letter-spacing: .2px;
+  text-shadow: 0 0 18px rgba(240,193,75,.12);
 }
 
 /* =========================================
    WEEKLY
    ========================================= */
-#weeklyFormSection form{
-  display:grid;
-  gap: 10px;
-}
+#weeklyFormSection form{ display:grid; gap: 10px; }
 #weeklyTools{ display:grid; gap: 10px; }
+
 #weeklyLists .category-block{
-  background: rgba(255,255,255,.03);
+  background:
+    radial-gradient(520px 140px at 10% 0%, rgba(47,211,255,.08), transparent 60%),
+    rgba(255,255,255,.03);
 }
 
 /* =========================================
@@ -536,7 +614,9 @@ textarea:focus{
   margin-bottom: 12px;
 }
 .subject-block{
-  background: rgba(255,255,255,.03);
+  background:
+    radial-gradient(520px 140px at 10% 0%, rgba(155,107,255,.08), transparent 60%),
+    rgba(255,255,255,.03);
 }
 
 /* =========================================
@@ -548,10 +628,12 @@ textarea:focus{
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border-radius: var(--r18);
+  border-radius: var(--r24);
   overflow: hidden;
-  border: 1px solid var(--line2);
-  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  background:
+    radial-gradient(700px 160px at 10% 0%, rgba(240,193,75,.10), transparent 60%),
+    rgba(255,255,255,.03);
 }
 
 #keuanganTable thead th{
@@ -561,28 +643,24 @@ textarea:focus{
   font-weight: 700;
   font-size: .92rem;
   background: rgba(255,255,255,.06);
-  border-bottom: 1px solid var(--line2);
+  border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
 #keuanganTable tbody td{
   padding: 10px 12px;
   border-bottom: 1px solid rgba(255,255,255,.06);
-  color: rgba(244,244,247,.92);
+  color: rgba(246,246,251,.92);
   vertical-align: top;
 }
 
-#keuanganTable tbody tr:hover{
-  background: rgba(255,255,255,.04);
-}
+#keuanganTable tbody tr:hover{ background: rgba(255,255,255,.04); }
 #keuanganTable tbody tr:last-child td{ border-bottom: none; }
+#keuanganTable button{ padding: 7px 10px; }
 
-#keuanganTable button{
-  padding: 7px 10px;
-}
-
-/* highlight finance summary a bit */
 #keuanganSummary .summary-card{
-  background: linear-gradient(135deg, rgba(139,0,0,.16), rgba(255,255,255,.03));
+  background:
+    radial-gradient(520px 160px at 10% 0%, rgba(240,193,75,.16), transparent 60%),
+    rgba(255,255,255,.03);
 }
 
 /* =========================================
@@ -596,7 +674,9 @@ textarea:focus{
 
 .wish-block{
   margin: 0;
-  background: rgba(255,255,255,.03);
+  background:
+    radial-gradient(520px 140px at 10% 0%, rgba(255,43,43,.10), transparent 60%),
+    rgba(255,255,255,.03);
 }
 
 /* =========================================
@@ -623,13 +703,12 @@ textarea:focus{
   #appMain{ padding-bottom: 96px; }
 
   #appTitle{
-    font-size: 2.0rem;
-    -webkit-text-stroke: 1px rgba(255,255,255,.55);
+    font-size: 2.05rem;
+    -webkit-text-stroke: 1px rgba(255,255,255,.58);
   }
   #appSubtitle{ font-size: .92rem; }
 
   #dashboardSummary{ grid-template-columns: 1fr; }
-
   #wishLists{ grid-template-columns: 1fr; }
 
   /* table still readable */
@@ -638,7 +717,7 @@ textarea:focus{
   /* Log-pose stack on mobile */
   #recentWeeklyList .rp-row{
     grid-template-columns: 1fr;
-    gap: 2px;
+    gap: 3px;
   }
   #recentWeeklyList .rp-day,
   #recentWeeklyList .rp-time{

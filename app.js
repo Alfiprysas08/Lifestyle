@@ -1,7 +1,7 @@
 // ============================================
 // LIFESTYLE - FULL JS (Firebase Realtime DB)
 // Includes: Tabs + Weekly + Materi + Keuangan (Rupiah) + Wishlist + Dashboard
-// Dashboard Log-Pose: Recent Weekly rapi (Title | Day | Time)
+// FIX: Dashboard "Berlayar > Log-Pose" sekarang urut Hari (Senin-Minggu) lalu Jam
 // ============================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
@@ -64,6 +64,48 @@ function mkLi(text) {
   const li = document.createElement("li");
   li.textContent = text;
   return li;
+}
+
+// ========================
+// FIX URUT HARI: Senin-Minggu lalu Jam
+// (untuk Dashboard "Berlayar > Log-Pose")
+// ========================
+const DAY_ORDER = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];
+const DAY_ALIASES = {
+  "jum'at": "jumat",
+  "jum’at": "jumat",
+  "ahad": "minggu",
+};
+
+function normDay(s) {
+  const d = (s || "").toString().trim().toLowerCase();
+  return DAY_ALIASES[d] || d;
+}
+
+function dayIndex(day) {
+  const d = normDay(day);
+  const i = DAY_ORDER.indexOf(d);
+  return i >= 0 ? i : 99; // hari tidak dikenali taruh bawah
+}
+
+function timeToMinutes(t) {
+  if (!t) return 24 * 60 + 59;
+  const [hh, mm] = String(t).split(":").map(Number);
+  if (!Number.isFinite(hh) || !Number.isFinite(mm)) return 24 * 60 + 59;
+  return hh * 60 + mm;
+}
+
+function byDayThenTime(a, b) {
+  const da = dayIndex(a.hari);
+  const db = dayIndex(b.hari);
+  if (da !== db) return da - db;
+
+  const ta = timeToMinutes(a.jam);
+  const tb = timeToMinutes(b.jam);
+  if (ta !== tb) return ta - tb;
+
+  // tie-breaker: kalau hari & jam sama, yang baru dibuat lebih atas
+  return (b.createdAt || 0) - (a.createdAt || 0);
 }
 
 // ========================
@@ -162,11 +204,12 @@ function renderDashboard() {
   $("#sumWishDone").textContent = wishDone;
   $("#sumWishTodo").textContent = wishTodo;
 
-  // ---- Recent lists (ALL)
-  const recentWeekly = weeklyArr.sort(byNewest);
-  const recentMateri = materiAll.sort(byNewest);
-  const recentKeu = finArr.sort(byNewest);
-  const recentWish = wishArr.sort(byNewest);
+  // ---- Recent lists
+  // FIX: Weekly untuk dashboard sekarang urut hari + jam
+  const recentWeekly = weeklyArr.slice().sort(byDayThenTime);
+  const recentMateri = materiAll.slice().sort(byNewest);
+  const recentKeu = finArr.slice().sort(byNewest);
+  const recentWish = wishArr.slice().sort(byNewest);
 
   const rw = $("#recentWeeklyList");
   const rm = $("#recentMateriList");
@@ -301,6 +344,7 @@ function renderWeekly() {
   }
 
   WEEKLY_CATS.forEach((cat) => {
+    // biarkan tab Weekly tetap byNewest (sesuai versi kamu sebelumnya)
     const arr = grouped[cat].sort(byNewest);
 
     const total = arr.length;
